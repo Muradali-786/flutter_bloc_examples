@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_example/bloc/counter/counter_bloc.dart';
-import 'package:flutter_bloc_example/bloc/counter/counter_event.dart';
-import 'package:flutter_bloc_example/bloc/counter/counter_state.dart';
+
+import 'package:flutter_bloc_example/view/home/counter_page.dart';
+import 'package:flutter_bloc_example/view/home/notification_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,7 +13,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    print('built ho rha ha ni again ');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bloc StateManagement'),
@@ -23,36 +21,45 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          BlocBuilder<CounterBloc, CounterState>(builder: (context, state) {
-            return Center(
-              child: Text(
-                state.counter.toString(),
-                style: const TextStyle(
-                  fontSize: 68,
-                  color: Colors.black,
-                ),
-              ),
-            );
-          }),
-          const SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    context.read<CounterBloc>().add(DecrementCounter());
-                  },
-                  child: const Text('Decrement')),
-              const SizedBox(width: 15),
-              ElevatedButton(
-                  onPressed: () {
-                    context.read<CounterBloc>().add(IncrementCounter());
-                  },
-                  child: const Text('Increment'))
-            ],
+          CustomButton(
+            title: 'Counter Page',
+            onTap: () {
+              Navigator.push(context,  MaterialPageRoute(builder: (context) => const CounterPage()));
+
+            },
+          ),
+          const SizedBox(height: 15),
+          CustomButton(
+            title: 'Notification Page',
+            onTap: () {
+              Navigator.push(context,  MaterialPageRoute(builder: (context) => const NotificationPage()));
+
+            },
           )
         ],
+      ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
+  const CustomButton({
+    super.key,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0),
+      child: Center(
+        child: ElevatedButton(
+          onPressed: onTap,
+          child: Text(title),
+        ),
       ),
     );
   }
