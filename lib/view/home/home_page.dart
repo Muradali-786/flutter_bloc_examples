@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc_example/view/home/counter_page.dart';
+import 'package:flutter_bloc_example/view/home/favourite_page.dart';
 import 'package:flutter_bloc_example/view/home/notification_page.dart';
+import 'package:flutter_bloc_example/view/home/todo_list_page.dart';
+
+import 'image_picker_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,18 +27,49 @@ class _HomePageState extends State<HomePage> {
           CustomButton(
             title: 'Counter Page',
             onTap: () {
-              Navigator.push(context,  MaterialPageRoute(builder: (context) => const CounterPage()));
-
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const CounterPage()));
             },
           ),
           const SizedBox(height: 15),
           CustomButton(
             title: 'Notification Page',
             onTap: () {
-              Navigator.push(context,  MaterialPageRoute(builder: (context) => const NotificationPage()));
-
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NotificationPage()));
             },
-          )
+          ),
+          const SizedBox(height: 15),
+          CustomButton(
+            title: 'Image Picker Page',
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ImagePickerPage()));
+            },
+          ),
+          const SizedBox(height: 15),
+          CustomButton(
+            title: 'Todo List Page',
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const TodoListPage()));
+            },
+          ),
+          const SizedBox(height: 15),
+          CustomButton(
+              title: 'Favourite Page',
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FavouritePage()));
+              })
         ],
       ),
     );
