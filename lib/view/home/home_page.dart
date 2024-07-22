@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc_example/view/home/api_example.dart';
 import 'package:flutter_bloc_example/view/home/counter_page.dart';
 import 'package:flutter_bloc_example/view/home/favourite_page.dart';
 import 'package:flutter_bloc_example/view/home/notification_page.dart';
@@ -69,6 +70,16 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const FavouritePage()));
+              })
+          ,
+          const SizedBox(height: 15),
+          CustomButton(
+              title: 'Api Example Page',
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ApiExample()));
               })
         ],
       ),

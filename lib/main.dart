@@ -9,6 +9,7 @@ import 'package:flutter_bloc_example/utils/utils.dart';
 import 'package:flutter_bloc_example/view/home/home_page.dart';
 
 import 'bloc/image/image_picker_bloc.dart';
+import 'bloc/post_bloc/post_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,19 +38,18 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               FavouriteBloc(favouriteRepository: FavouriteRepository()),
         ),
-      ],
-      child: BlocProvider(
-        create: (context) => NotificationBloc(),
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          themeMode: ThemeMode.dark,
-          theme: ThemeData(
-
-            brightness: Brightness.dark,
-            useMaterial3: true,
-          ),
-          home: const HomePage(),
+        BlocProvider(
+          create: (context) => PostBloc(),
         ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        themeMode: ThemeMode.dark,
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          useMaterial3: true,
+        ),
+        home: const HomePage(),
       ),
     );
   }
