@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc_example/view/home/api_example.dart';
 import 'package:flutter_bloc_example/view/home/counter_page.dart';
 import 'package:flutter_bloc_example/view/home/favourite_page.dart';
+import 'package:flutter_bloc_example/view/home/login_page.dart';
 import 'package:flutter_bloc_example/view/home/notification_page.dart';
 import 'package:flutter_bloc_example/view/home/todo_list_page.dart';
 
@@ -80,6 +81,15 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const ApiExample()));
+              }),
+          const SizedBox(height: 15),
+          CustomButton(
+              title: 'Login Page',
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginPage()));
               })
         ],
       ),
