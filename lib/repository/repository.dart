@@ -6,13 +6,11 @@ import 'package:http/http.dart' as http;
 import '../model/post_model.dart';
 
 class Repository {
-  Future<List<PostModel>> fetchApi() async {
+  static const String _baseUrl = 'https://jsonplaceholder.typicode.com/comments';
+  Future<List<PostModel>> fetchApi(int page, int limit) async {
     try {
-      final response = await http.get(
-        Uri.parse(
-          'https://jsonplaceholder.typicode.com/comments',
-        ),
-      );
+      final response =
+          await http.get(Uri.parse('$_baseUrl?_page=$page&_limit=$limit'));
 
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body) as List;

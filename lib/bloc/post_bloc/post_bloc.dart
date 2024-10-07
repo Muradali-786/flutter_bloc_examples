@@ -8,25 +8,43 @@ import '../../model/post_model.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   Repository repository = Repository();
+
   List<PostModel> temPostList = [];
+  List<PostModel> newPostList = [];
   PostBloc() : super(const PostState()) {
     on<FetchEvent>(_fetchPostApi);
     on<SearchEvent>(_onSearch);
   }
 
   void _fetchPostApi(FetchEvent event, Emitter<PostState> emit) async {
-    await repository.fetchApi().then((value) {
+    if (state.status == PostStatus.loading || !state.hasMore) return;
+    emit(state.copyWith(status: PostStatus.loading));
+    try {
+      await repository.fetchApi(state.page, state.limit).then((data) {
+        if (data.isEmpty) {
+          emit(state.copyWith(hasMore: false));
+        } else {
+          newPostList.addAll(data);
+
+          emit(
+            state.copyWith(
+              postList: newPostList,
+              status: PostStatus.success,
+              message: 'success',
+              page: state.page + 1,
+            ),
+          );
+        }
+      }).onError((error, stackTrace) {
+        emit(
+          state.copyWith(status: PostStatus.error, message: error.toString()),
+        );
+      });
+    } catch (e) {
       emit(
-        state.copyWith(
-            postList: value.toList(),
-            status: PostStatus.success,
-            message: 'success'),
+        state.copyWith(status: PostStatus.error, message: e.toString()),
       );
-    }).onError((error, stackTrace) {
-      emit(
-        state.copyWith(status: PostStatus.error, message: error.toString()),
-      );
-    });
+    }
   }
 
   void _onSearch(SearchEvent event, Emitter<PostState> emit) {
