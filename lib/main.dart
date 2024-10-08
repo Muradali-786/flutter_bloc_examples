@@ -44,10 +44,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.dark,
         theme: ThemeData(
-          brightness: Brightness.dark,
-          useMaterial3: true,
+          brightness: Brightness.light,
+          useMaterial3: false,
         ),
         home: const HomePage(),
       ),

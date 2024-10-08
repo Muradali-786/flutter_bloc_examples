@@ -4,6 +4,7 @@ import 'package:flutter_bloc_example/bloc/post_bloc/post_bloc.dart';
 import 'package:flutter_bloc_example/bloc/post_bloc/post_event.dart';
 import 'package:flutter_bloc_example/bloc/post_bloc/post_state.dart';
 import 'package:flutter_bloc_example/utils/post_status.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ApiExample extends StatefulWidget {
   const ApiExample({super.key});
@@ -24,26 +25,33 @@ class _ApiExampleState extends State<ApiExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
         centerTitle: true,
-        title: const Text('Filter Api List Using Bloc'),
+        elevation: 0,
+        title: const Text('Pagination Using BLoC',style: TextStyle(color:Colors.black87),),
       ),
-      body: BlocBuilder<PostBloc, PostState>(
-        buildWhen: (previous, current) => previous.status != current.status && previous.page==1,
-        builder: (context, state) {
-          switch (state.status) {
-            case PostStatus.loading:
-              return const Center(child: CircularProgressIndicator());
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: BlocBuilder<PostBloc, PostState>(
+          buildWhen: (previous, current) =>
+              previous.status != current.status && previous.page == 1,
+          builder: (context, state) {
+            switch (state.status) {
+              case PostStatus.loading:
+                return const Center(child: LoadingSpinner());
 
-            case PostStatus.error:
-              return Center(child: Text(state.message.toString()));
-            case PostStatus.success:
-              return CustomItem(controller: controller);
-            default:
-              return const SizedBox.shrink();
-          }
-        },
+              case PostStatus.error:
+                return Center(child: Text(state.message.toString()));
+              case PostStatus.success:
+                return CustomItem(controller: controller);
+              default:
+                return const SizedBox.shrink();
+            }
+          },
+        ),
       ),
     );
   }
@@ -56,7 +64,7 @@ class CustomItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostBloc, PostState>(
-      buildWhen: (c, p) => c.hasMore != p.hasMore || c.status != p.status,
+      buildWhen: (c, p) => c.status != p.status,
       builder: (context, state) {
         return Column(
           children: [
@@ -64,13 +72,17 @@ class CustomItem extends StatelessWidget {
               controller: controller,
               decoration: const InputDecoration(
                   hintText: 'Search With Email',
-                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 8),
                   border: OutlineInputBorder()),
               onChanged: (e) {
                 context
                     .read<PostBloc>()
                     .add(SearchEvent(stText: controller.text.toString()));
               },
+            ),
+            const SizedBox(
+              height: 8,
             ),
             NotificationListener<ScrollNotification>(
               onNotification: (ScrollNotification scrollInfo) {
@@ -90,17 +102,31 @@ class CustomItem extends StatelessWidget {
                         itemBuilder: (context, index) {
                           if (index == state.postList.length && state.hasMore) {
                             return const Center(
-                              child: CircularProgressIndicator(),
+                              child: LoadingSpinner(),
                             );
                           }
                           final e = state.temPostList.isEmpty
                               ? state.postList[index]
                               : state.temPostList[index];
                           return Card(
+                            elevation: 3,
+                            color: Colors.white,
                             child: ListTile(
-                              leading: Text(e.id.toString()),
-                              title: Text(e.email.toString()),
-                              subtitle: Text(e.body.toString()),
+                              dense: true,
+                              leading: Text(
+                                e.id.toString(),
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              title: Text(
+                                e.email.toString(),
+                                style: TextStyle(color: Color(0xff2845d1)),
+                              ),
+                              subtitle: Text(
+                                e.body.toString(),
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black87),
+                              ),
                             ),
                           );
                         },
@@ -113,6 +139,21 @@ class CustomItem extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class LoadingSpinner extends StatelessWidget {
+  const LoadingSpinner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 5.0),
+      child: SpinKitCircle(
+        color: Color(0xff2845d1),
+        size: 30.0,
+      ),
     );
   }
 }

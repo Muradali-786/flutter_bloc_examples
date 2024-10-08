@@ -17,7 +17,7 @@ class PostState extends Equatable {
     this.status = PostStatus.initial,
     this.message = '',
     this.response = '',
-    this.limit = 6,
+    this.limit = 10,
     this.page = 1,
     this.hasMore = true,
   });
